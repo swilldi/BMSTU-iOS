@@ -23,7 +23,7 @@ enum MathFunc {
 }
 
 let actionArray: Array<MathFunc> = [.sum(1, 2), .difference(20, 10), .multiplication(4, 94), .division(42, 5),
-                                    .sqrt(6), .sqrt(16), .square(4), .powerExp(2), .power(4, 8)]
+                                    .sqrt(6), .sqrt(16), .square(4), .powerExp(2), .powerExp(0), .power(4, 8)]
 for action in actionArray {
     var actionInfo: String
     switch action {
