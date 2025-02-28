@@ -6,15 +6,15 @@
 import Foundation
 
 let array = ["a", "b3", "cc", "dfa", "4444444", "dfgdsfg"]
-var count_symbols = [Int:Array<String>]()
+var countSymbols = [Int:Array<String>]()
 
 // перебор элеметов массива
 for str in array {
-    count_symbols[str.count] = (count_symbols[str.count] ?? []) + [str]
+    countSymbols[str.count] = (countSymbols[str.count] ?? []) + [str]
 }
 
-for amount in count_symbols.keys.sorted() {
-    if let elements = count_symbols[amount] {
+for amount in countSymbols.keys.sorted() {
+    if let elements = countSymbols[amount] {
         print("\(amount) – \(elements)")
     }
 }

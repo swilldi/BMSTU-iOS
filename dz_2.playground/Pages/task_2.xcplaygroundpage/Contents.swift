@@ -13,23 +13,23 @@
 import Foundation
 
 let string = "(())))"
-var count_open: Int = 0
+var countOpen: Int = 0
 var result = "Корректная"
 
 for symbol in string {
     if symbol == "(" {
-        count_open += 1
+        countOpen += 1
     } else {
         count_open -= 1
     }
     
-    if count_open < 0 {
+    if countOpen < 0 {
         result = "Некорректная"
         break
     }
 }
 
-if count_open != 0 {
+if countOpen != 0 {
     result = "Некорректная"
 }
 
