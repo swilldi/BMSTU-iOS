@@ -12,7 +12,7 @@
 
 import Foundation
 
-let string = "(())))"
+let string = "(())"
 var countOpen: Int = 0
 var result = "Корректная"
 
@@ -20,7 +20,7 @@ for symbol in string {
     if symbol == "(" {
         countOpen += 1
     } else {
-        count_open -= 1
+        countOpen -= 1
     }
     
     if countOpen < 0 {
