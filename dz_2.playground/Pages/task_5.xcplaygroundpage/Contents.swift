@@ -38,14 +38,14 @@ for action in actionArray {
         actionInfo = "Частное | \(a) / \(b) = \(Float(a) / Float(b))"
     
     case .sqrt(let a):
-        actionInfo = "Квадратный корень | \(a)^(1/2) = \(sqrt(Double(a)))"
+        actionInfo = "Квадратный корень | \(a)^(1/2) = \(sqrt(Float(a)))"
     case .square(let a):
         actionInfo = "Квадрат | \(a)^2 = \(a * a)"
         
     case .power(let a, let b):
-        actionInfo = "Возведение в степень | \(a)^\(b) = \(pow(Double(a), Double(b)))"
+        actionInfo = "Возведение в степень | \(a)^\(b) = \(pow(Float(a), Float(b)))"
     case .powerExp(let a):
-        actionInfo = "Экспонента в степени | e^\(a) = \(exp(Double(a)))"
+        actionInfo = "Экспонента в степени | e^\(a) = \(exp(Float(a)))"
     
     }
     print(actionInfo)

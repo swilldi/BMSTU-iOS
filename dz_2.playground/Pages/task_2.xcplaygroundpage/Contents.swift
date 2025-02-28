@@ -12,7 +12,7 @@
 
 import Foundation
 
-let string = "(("
+let string = "(()())"
 var countOpen: Int = 0
 var result = "Корректная"
 
