@@ -12,14 +12,14 @@
 
 import Foundation
 
-let string = "(()())"
+let string = "((99))"
 var countOpen: Int = 0
 var result = "Корректная"
 
 for symbol in string {
     if symbol == "(" {
         countOpen += 1
-    } else {
+    } else if symbol == ")" {
         countOpen -= 1
     }
     

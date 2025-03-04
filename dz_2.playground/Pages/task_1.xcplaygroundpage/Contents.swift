@@ -14,10 +14,10 @@ import Foundation
 
 //let string = "apple Orange pineapple PEAR"
 //let string = "apple aPPle appLe Apple"
-let string = "1 2 4 2 1 3 5 3 app, App aPP ApA 4 5 6 3 2"
+let string = "1 2 4 2 1 3 5 3 app App aPP ApA 4 5 6 3 2"
 var uniqueWords = Set<String>()
 for word in string.split(separator: " ") {
     uniqueWords.insert(String(word).lowercased())
 }
-print(uniqueWords)
+print(uniqueWords.count)
 

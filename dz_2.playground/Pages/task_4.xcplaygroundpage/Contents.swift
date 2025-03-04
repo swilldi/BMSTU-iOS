@@ -6,7 +6,7 @@
 import Foundation
 
 var sumScore = 0, numbersOfScore = 0
-var dict1: [String:Int?] = ["A": nil, "B": 4, "C": 4, "D": 1, "E": nil, "F": 1, "G": 2]
+var dict1: [String:Int?] = ["A": nil, "B": nil, "C": nil, "D": nil, "E": nil, "F": nil, "G": nil]
 
 for score in dict1.values {
     if let score = score {
