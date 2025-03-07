@@ -6,11 +6,15 @@ enum BookGenre {
     case poems
 }
 
-struct Book {
+struct Book: CustomStringConvertible {
     let title: String
     let author: String
     var price: Int
     let genre: BookGenre
+    
+    var description: String {
+        "'\(title)', \(author), \(genre) – \(price)"
+    }
 }
 
 class Library {
