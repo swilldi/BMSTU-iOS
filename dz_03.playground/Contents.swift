@@ -3,7 +3,7 @@ enum BookGenre {
     case fiction
     case science_fiction
     case novel
-    case poem
+    case poems
 }
 
 struct Book {
@@ -22,12 +22,12 @@ class Library {
         self.bookShelf.append(book)
     }
     
-    func filterBooks(by genre: BookGenre) {
+    func filterBooks(by genre: BookGenre) -> [Book] {
         self.bookShelf.filter { $0.genre == genre }
     }
     
-    func filterBooks(by title: String) {
-        self.bookShelf.filter { $0.title == title }
+    func filterBooks(byName title: String) -> [Book] {
+        self.bookShelf.filter { $0.title.contains(title) }
     }
     
 }
@@ -74,3 +74,57 @@ class User {
     }
     
 }
+
+
+let library = Library()
+library.addBook(
+    Book(
+        title: "Гарри Поттер и философский камень",
+        author: "Дж.К. Роулинг",
+        price: 1000,
+        genre: .fiction
+    )
+)
+library.addBook(
+    Book(
+        title: "Война и мир",
+        author: "Лев Толстой",
+        price: 850,
+        genre: .novel
+    )
+)
+library.addBook(
+    Book(
+        title: "Стихотворение",
+        author: "Владимир Маяковский",
+        price: 540,
+        genre: .poems
+    )
+)
+
+let booooks = [
+    Book(
+        title: "451 градус по Фаренгейту",
+        author: "Рэй Брэдбери",
+        price: 600,
+        genre: .fiction
+    ),
+    Book(
+        title: "Собачье сердце",
+        author: "Михаил Булгаков",
+        price: 400,
+        genre: .science_fiction
+    )
+    
+]
+
+let user = User(name: "Алиса", discount: 1.5)
+let novelBooks = library.filterBooks(by: .novel)
+user.addToCart(novelBooks)
+let booksWithName = library.filterBooks(byName: "Гарри")
+user.addToCart(booksWithName)
+
+user.addToCart(booooks)
+
+print("Итоговая корзина: \(user.sortedListOfBooks(by: .alphabet))")
+print("Цена корзины: \(user.totalPrice())")
