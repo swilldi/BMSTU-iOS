@@ -26,7 +26,7 @@ enum Genre: String {
 }
 
 
-struct Book: CustomStringConvertible {
+struct Book {
     let title: String
     let author: String
     var price: Float
