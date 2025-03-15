@@ -11,7 +11,7 @@ protocol Flyable {
     func fly()
 }
 
-//
+// Протолок, для предметов
 protocol Item {
     var label: String { get }
     var type: ItemType { get }
@@ -37,7 +37,7 @@ enum ItemType: Equatable {
     var label: String {
         switch self {
         case .heal(let value):
-            "Зелье лечения \(value) HP"
+            "Зелье лечения \(value.rawValue) HP"
         case .levelUp:
             "Зелье повышения уровня"
         }
@@ -65,16 +65,35 @@ class Potion: Item, CustomStringConvertible {
         
     }
     
-    func printAbout() {
-        print(self)
-    }
-    
     func use(to character: GameCharacter) {
         action(character)
     }
     
     var description: String { label }
     
+}
+
+
+class Inventory: CustomStringConvertible {
+    var items = [Item]()
+    
+    var description: String { return "\(items)"}
+    
+    func add(_ item: Item) {
+        items.append(item)
+    }
+    
+    func get(_ type: ItemType) -> Item? {
+        // Ищем элемент с нужным типо
+        // Если его нет возвращаем nil
+        for (i, item) in items.enumerated() {
+            if item.type == type {
+                return items.remove(at: i)
+            }
+        }
+        return nil
+    }
+
 }
 
 
@@ -91,7 +110,7 @@ class GameCharacter: Healable {
     var maxHealth: Int
     var health: Int
     var level: Int
-    var inventory = [Item]()
+    var inventory = Inventory()
     
     
     init(name: String, health: Int, level: Int) {
@@ -125,23 +144,14 @@ class GameCharacter: Healable {
     }
     
     func takeItem(item: Item) {
-        inventory.append(item)
+        inventory.add(item)
     }
     
-//    func use(item: ItemType) {
-//        print(self)
-//        var wasFinded = (false, 0)
-//        for i in 0..<inventory.count {
-//            if inventory[i].type == item {
-//                inventory[i].use(to: self)
-//                wasFinded = (true, i)
-//                break
-//            }
-//        }
-//        if wasFinded.0 {
-//            inventory.remove(at: wasFinded.1)
-//        }
-//    }
+    func use(item type: ItemType) {
+        if let item = inventory.get(type) {
+            item.use(to: self)
+        }
+    }
 }
 
 
@@ -150,13 +160,13 @@ extension GameCharacter {
     var isAlive: Bool { health > 0}
 }
 
-extension GameCharacter{
-    func printCharacterInfo() {
+extension GameCharacter {
+    func printCharacterInfo(_ paramenters: [String] = []) {
         print(
         """
         Name: \(name)
         Level: \(level)
-        Health: \(health)
+        Health: \(health) / \(maxHealth)\(paramenters.isEmpty ? "" : "\n" + paramenters.joined(separator: "\n"))
         Inventory: \(inventory)
         """
         )
@@ -208,7 +218,6 @@ class Warrior: GameCharacter {
             armor += armorCoefficient
         }
     }
-    
 }
 
 
@@ -262,24 +271,70 @@ class Mage: GameCharacter, Flyable {
 
 
 // Тестирование GameCharacter
-let healPotion = Potion(type: .heal(value: .small))
+let smallHeal = Potion(type: .heal(value: .small))
+let levelUp = Potion(type: .levelUp)
+
+
+// Лечение с помощью зелья
+print("--Провека взаимодействия персонажа с инвенатрем--")
 var player_1 = GameCharacter(name: "player_1", health: 100, level: 1)
-for _ in 0...2 { player_1.takeItem(item: healPotion) }
-//player_1.takeDamage(amount: 30)
-//player_1.use(item: .heal(value: .small))
-//player_1.health
-//player_1.printCharacterInfo()
+player_1.printCharacterInfo()
+player_1.takeDamage(amount: 40)
+print(player_1.health)
+print(player_1.inventory)
+player_1.takeItem(item: smallHeal)
+player_1.takeItem(item: smallHeal)
+print(player_1.inventory)
+player_1.use(item: .heal(value: .small))
+print(player_1.health)
+print("\(player_1.inventory)")
+
+// Повышение уровня с помощью зелья
+print("\n--Проверка влияния уровня персонажа--")
+var player_2 = GameCharacter(name: "player_2", health: 100, level: 1)
+player_2.printCharacterInfo()
+player_2.takeItem(item: levelUp)
+print(player_2.inventory)
+player_2.use(item: .levelUp)
+player_2.printCharacterInfo()
+
+// Персонаж с не нулевым уровнем
+print("\n--Персонаж с не первым уровнем--")
+let player_3 = GameCharacter(name: "player_3", health: 100, level: 4)
+player_3.printCharacterInfo()
+print()
+
+let warrior_1 = Warrior(name: "warrior_1", health: 150, armor: 5, power: 10, level: 3)
+warrior_1.printCharacterInfo(["Armor: \(warrior_1.armor)", "Power: \(warrior_1.power)"])
+print()
+
+var mage_1 = Mage(name: "mage_1", health: 70, magicPower: 10, physicPower: 5, level: 10)
+mage_1.printCharacterInfo(["Magic power: \(mage_1.magicPower)", "Physic power: \(mage_1.physicPower)"])
+print()
+
+mage_1.levelUp()
+mage_1.printCharacterInfo(["Magic power: \(mage_1.magicPower)", "Physic power: \(mage_1.physicPower)"])
+
+// Уникальные методы дочерних классов
+print("\n--Атака и уникальные методы классов--")
+let warrior_2 = Warrior(name: "warroir_2", health: 100, armor: 5, power: 10, level: 1)
+print("Воин – Health: \(warrior_2.health) HP | Power: \(warrior_2.power) | Armor: \(warrior_2.armor)")
+let mage_2 = Mage(name: "mage_2", health: 100, magicPower: 10, physicPower: 3, level: 1)
+print("Маг – Health: \(warrior_2.health) HP | Physic power: \(mage_2.physicPower) | Magic power: \(mage_2.magicPower)")
+
+print("\nАтака воина")
+warrior_2.attack(target: mage_2)
+print("Воин атакует мага\n10 урон воина\n0 защита мага")
+print("Воин – Health: \(warrior_2.health)")
 
 
+print("\nАтака мага")
+print("Маг атакует воина магией:\n5 + 10 урон мага\n5 защита воина")
+mage_2.magicAttack(target: warrior_2)
+print("Воин – Health: \(warrior_2.health)")
 
-var a: Array<Item> = Array(repeating: healPotion, count: 3)
-//for (i, v) in a.enumerated() {
-//    if v.type == .heal(value: .small) {
-//        a.remove(at: i)
-//        break
-//    }
-//}
-//print(123)
-a.remove(at: 1)
-print(a)
+print("\nПолет мага")
+mage_2.fly()
+
+
 
