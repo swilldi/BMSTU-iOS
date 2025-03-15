@@ -20,18 +20,61 @@ protocol Item {
 }
 
 
-enum ItemType: String {
-    case healingPothion = "Целебное зелье"
-    case levelUppingPotion = "Зелье повышения уровня"
-
-    var action: (GameCharacter) -> () {
+enum ItemType: Equatable {
+    enum PotionSize: Int {
+        case small = 20
+        case medium = 40
+        case large = 80
+    }
+    
+    case heal(value: PotionSize)
+    case levelUp
+    
+    static func == (lhs: ItemType, rhs: ItemType) -> Bool {
+        lhs.label == rhs.label
+    }
+    
+    var label: String {
         switch self {
-        case .healingPothion:
-            { character in character.heal(amount: 20) }
-        case .levelUppingPotion:
-            { character in character.levelUp() }
+        case .heal(let value):
+            "Зелье лечения \(value) HP"
+        case .levelUp:
+            "Зелье повышения уровня"
         }
     }
+}
+
+
+class Potion: Item, CustomStringConvertible {
+    
+    let type: ItemType
+    var label: String
+    let action: (GameCharacter) -> Void
+    
+    init(type: ItemType) {
+        self.type = type
+        self.label = type.label
+        self.action = {
+            switch type {
+            case .heal(let value):
+                $0.heal(amount: value.rawValue)
+            case .levelUp:
+                $0.levelUp()
+            }
+        }
+        
+    }
+    
+    func printAbout() {
+        print(self)
+    }
+    
+    func use(to character: GameCharacter) {
+        action(character)
+    }
+    
+    var description: String { label }
+    
 }
 
 
@@ -48,8 +91,7 @@ class GameCharacter: Healable {
     var maxHealth: Int
     var health: Int
     var level: Int
-    var inventory = [String:Int]()
-    var dustinessInventory = 10
+    var inventory = [Item]()
     
     
     init(name: String, health: Int, level: Int) {
@@ -83,31 +125,43 @@ class GameCharacter: Healable {
     }
     
     func takeItem(item: Item) {
-        inventory[item.label] = 1 + (inventory[item.label] ?? 0)
+        inventory.append(item)
     }
     
-    func use(item: Item) {
-        if inventory[item.label] ?? 0 > 0 {
-            inventory[item.label]! -= 1
-            item.action(self)
-        }
-    }
+//    func use(item: ItemType) {
+//        print(self)
+//        var wasFinded = (false, 0)
+//        for i in 0..<inventory.count {
+//            if inventory[i].type == item {
+//                inventory[i].use(to: self)
+//                wasFinded = (true, i)
+//                break
+//            }
+//        }
+//        if wasFinded.0 {
+//            inventory.remove(at: wasFinded.1)
+//        }
+//    }
 }
 
 
 // Добавляем раширение для класса GameCharacter
 extension GameCharacter {
     var isAlive: Bool { health > 0}
-    func printCharacterInfo() {
-        print("Name: \(name)\nLevel: \(level)\nHealth: \(health)")
-    }
 }
 
-    
-let player = GameCharacter(name: "Player_1", health: 100, level: -1)
-player.maxHealth
-player.levelUp()
-player.maxHealth
+extension GameCharacter{
+    func printCharacterInfo() {
+        print(
+        """
+        Name: \(name)
+        Level: \(level)
+        Health: \(health)
+        Inventory: \(inventory)
+        """
+        )
+    }
+}
 
 
 class Warrior: GameCharacter {
@@ -206,20 +260,26 @@ class Mage: GameCharacter, Flyable {
 }
 
 
-struct Potion: Item {
-    let type: ItemType
-    var label: String
-    let action: (GameCharacter) -> ()
-    
-    init(type: ItemType) {
-        self.type = type
-        self.label = type.rawValue
-        self.action = type.action
-    }
-    
-    func use(to character: GameCharacter) {
-        action(character)
-    }
-}
 
+// Тестирование GameCharacter
+let healPotion = Potion(type: .heal(value: .small))
+var player_1 = GameCharacter(name: "player_1", health: 100, level: 1)
+for _ in 0...2 { player_1.takeItem(item: healPotion) }
+//player_1.takeDamage(amount: 30)
+//player_1.use(item: .heal(value: .small))
+//player_1.health
+//player_1.printCharacterInfo()
+
+
+
+var a: Array<Item> = Array(repeating: healPotion, count: 3)
+//for (i, v) in a.enumerated() {
+//    if v.type == .heal(value: .small) {
+//        a.remove(at: i)
+//        break
+//    }
+//}
+//print(123)
+a.remove(at: 1)
+print(a)
 
