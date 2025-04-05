@@ -68,7 +68,7 @@ enum Ship: Int, Item {
             strPrise = String(prise % 10) + strPrise
             count += 1
             if count == 3 && !(1...9).contains(prise) {
-                strPrise = "," + strPrise
+                strPrise = " " + strPrise
                 count = 0
             }
             prise /= 10

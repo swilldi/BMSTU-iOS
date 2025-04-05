@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     private var itemImage: UIImageView?
+    private var imageBackground: UILabel?
     private var companyLabel: UILabel?
     private var titleLabel: UILabel?
     private var priseLabel: UILabel?
@@ -20,41 +21,47 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         
-        setupShipImage()
+        setupImage()
         setupButton()
-        setupFactory()
-        setupShipTitile()
-        setupShipPrise()
+        setupCompany()
+        setupTitile()
+        setupPrise()
         setupConstrains()
     }
     
-    private func setupShipImage() {
+    private func setupImage() {
         let image = UIImage(named: item.title)
         
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
         
+        let background = UILabel()
+        background.backgroundColor = .gray
+        
+        view.addSubview(background)
         view.addSubview(imageView)
         
+        
         itemImage = imageView
+        imageBackground = background
     }
     
-    private func setupFactory() {
+    private func setupCompany() {
         let factory = UILabel()
-        factory.font = .systemFont(ofSize: 30)
+        factory.font = .systemFont(ofSize: 18)
         factory.textColor = .gray
         factory.textAlignment = .center
         factory.numberOfLines = 1
-        factory.text = item.company
+        factory.text = item.company.uppercased()
         view.addSubview(factory)
         
         companyLabel = factory
     }
     
-    private func setupShipTitile() {
+    private func setupTitile() {
         let title = UILabel()
-        title.font = .systemFont(ofSize: 40)
+        title.font = .systemFont(ofSize: 20)
         title.textColor = .white
         title.textAlignment = .center
         title.numberOfLines = 1
@@ -64,9 +71,9 @@ class ViewController: UIViewController {
         titleLabel = title
     }
     
-    private func setupShipPrise() {
+    private func setupPrise() {
         let prise = UILabel()
-        prise.font = .systemFont(ofSize: 30)
+        prise.font = .boldSystemFont(ofSize: 23)
         prise.textColor = .white
         prise.textAlignment = .center
         prise.numberOfLines = 1
@@ -97,29 +104,33 @@ class ViewController: UIViewController {
         item = item.next() as! any Item
         
         itemImage?.image = UIImage(named: item.title)
-        companyLabel?.text = item.company
+        companyLabel?.text = item.company.uppercased()
         titleLabel?.text = item.title.capitalized
         priseLabel?.text = item.prise
     }
     
     
     private func setupConstrains() {
-        guard let itemImage, let companyLabel, let titleLabel, let priseLabel, let nextItemButton else { return }
+        guard let itemImage, let imageBackground, let companyLabel, let titleLabel, let priseLabel, let nextItemButton else { return }
     
         
         itemImage.translatesAutoresizingMaskIntoConstraints = false
+        imageBackground.translatesAutoresizingMaskIntoConstraints = false
         companyLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         priseLabel.translatesAutoresizingMaskIntoConstraints = false
         nextItemButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // место для shipImage
-            
             itemImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             itemImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             itemImage.widthAnchor.constraint(equalTo: view.widthAnchor),
             itemImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),
+            
+            imageBackground.centerYAnchor.constraint(equalTo: itemImage.centerYAnchor),
+            imageBackground.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageBackground.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 20),
+            imageBackground.heightAnchor.constraint(equalTo: itemImage.heightAnchor),
             
             companyLabel.topAnchor.constraint(equalTo: itemImage.bottomAnchor, constant: 10),
             companyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
