@@ -21,7 +21,7 @@ enum Ship: Int, Item {
         case rsi = "Roberts Space Industries"
     }
     
-    case raven = 0, andromeda, f8c, galaxy
+    case raven = 0, andromeda, f8c, galaxy, carrack
     
     var title: String {
         switch self {
@@ -33,6 +33,8 @@ enum Ship: Int, Item {
             "galaxy"
         case .raven:
             "raven"
+        case .carrack:
+            "carrack"
         }
     }
     
@@ -42,7 +44,7 @@ enum Ship: Int, Item {
             "Roberts Space Industries"
         case .raven:
             "Aegis Dynamics"
-        case .f8c:
+        case .f8c, .carrack:
             "Anvil Aerospace"
         }
     }
@@ -51,7 +53,7 @@ enum Ship: Int, Item {
         switch self {
         case .andromeda:
             1000000
-        case .galaxy:
+        case .galaxy, .carrack:
             3000000
         case .raven:
             400000
@@ -73,12 +75,11 @@ enum Ship: Int, Item {
             }
             prise /= 10
         }
-        return strPrise
+        return strPrise + " UEC"
     }
     
     func next() -> Ship {
-        Ship(rawValue: (rawValue + 1) % 4) ?? .raven
+        Ship(rawValue: (rawValue + 1) % 5) ?? .raven
     }
 }
-
 
