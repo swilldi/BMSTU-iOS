@@ -104,7 +104,8 @@ class ViewController: UIViewController {
     // MARK: Дейстия при нажатии кнопки
     @objc private func didTapButton() {
         // Вот тут вопрос для чего тут требуется вставка "as! any Item"
-        item = item.next()
+        let nextShip = Ships(rawValue: (item.type.rawValue + 1) % 5) ?? .raven
+        item = Item(nextShip)
         
         itemImage?.image = UIImage(named: item.title)
         companyLabel?.text = item.company.uppercased()

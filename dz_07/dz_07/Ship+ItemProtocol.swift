@@ -96,10 +96,5 @@ struct Item: ItemProtocol {
         company = type.company
         prise = type.prise
     }
-    
-    func next() -> Item {
-        let nextShip = Ships(rawValue: (type.rawValue + 1) % 5) ?? .raven
-        return Item(nextShip)
-    }
 }
 
