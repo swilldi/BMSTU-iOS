@@ -40,12 +40,7 @@ class ViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
         
-        let background = UILabel()
-        background.backgroundColor = .gray
-        
-        view.addSubview(background)
         view.addSubview(imageView)
-        
         
         itemImage = imageView
     }

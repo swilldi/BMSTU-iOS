@@ -86,7 +86,7 @@ struct Item: ItemProtocol {
                 strPrise = " " + strPrise
             }
         }
-        return strPrise
+        return strPrise + " UEC"
     }
     
     init(_ type: Ships)
