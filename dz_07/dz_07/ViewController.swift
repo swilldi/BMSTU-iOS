@@ -14,12 +14,16 @@ class ViewController: UIViewController {
     private var priseLabel: UILabel?
     private var nextItemButton: UIButton?
     
-    private var item: any Item = Ship.raven
+    private var item: Item = Item(.raven)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         
+        setupUI()
+    }
+    
+    private func setupUI() {
         setupImage()
         setupButton()
         setupCompany()
@@ -79,7 +83,7 @@ class ViewController: UIViewController {
         prise.textColor = .white
         prise.textAlignment = .center
         prise.numberOfLines = 1
-        prise.text = item.prise
+        prise.text = item.formatPrise
         view.addSubview(prise)
         
         priseLabel = prise
@@ -105,17 +109,24 @@ class ViewController: UIViewController {
     // MARK: Дейстия при нажатии кнопки
     @objc private func didTapButton() {
         // Вот тут вопрос для чего тут требуется вставка "as! any Item"
-        item = item.next() as! any Item
+        item = item.next()
         
         itemImage?.image = UIImage(named: item.title)
         companyLabel?.text = item.company.uppercased()
         titleLabel?.text = item.title.capitalized
-        priseLabel?.text = item.prise
+        priseLabel?.text = item.formatPrise
     }
     
     // MARK: Создание относительного расположения элементов
     private func setupConstrains() {
-        guard let itemImage, let companyLabel, let titleLabel, let priseLabel, let nextItemButton else { return }
+        guard let itemImage,
+              let companyLabel,
+              let titleLabel,
+              let priseLabel,
+              let nextItemButton
+        else {
+            return
+        }
     
         
         itemImage.translatesAutoresizingMaskIntoConstraints = false

@@ -5,24 +5,29 @@
 //  Created by Dmitriy Dudyrev on 04.04.2025.
 //
 
-protocol Item {
-    associatedtype Item
+protocol ItemProtocol {
     var title: String { get }
     var company: String { get }
-    var prise: String { get }
-    func next() -> Item
+    var prise: Int { get }
+    var formatPrise: String { get }
 }
 
-enum Ship: Int, Item {
-    
-    enum ShipCompany: String {
-        case aegis = "Aegis Dynamics"
-        case anvil = "Anvil Aerospace"
-        case rsi = "Roberts Space Industries"
-    }
-    
+
+protocol ItemCompany {
+    var company: String { get }
+}
+
+
+enum ShipCompany: String {
+    case aegis = "Aegis Dynamics"
+    case anvil = "Anvil Aerospace"
+    case rsi = "Roberts Space Industries"
+}
+
+
+enum Ships: Int {
     case raven = 0, andromeda, f8c, galaxy, carrack
-    
+
     var title: String {
         switch self {
         case .andromeda:
@@ -49,7 +54,7 @@ enum Ship: Int, Item {
         }
     }
     
-    var intPrise: Int {
+    var prise: Int {
         switch self {
         case .andromeda:
             1000000
@@ -61,25 +66,40 @@ enum Ship: Int, Item {
             1000000
         }
     }
+}
+
+struct Item: ItemProtocol {
     
-    var prise: String {
-        var prise = intPrise
-        var count = 0
+    let type: Ships
+    
+    var title: String
+    var company: String
+    var prise: Int
+    
+    var formatPrise: String {
         var strPrise = ""
-        while prise != 0 {
-            strPrise = String(prise % 10) + strPrise
-            count += 1
-            if count == 3 && !(1...9).contains(prise) {
+        var prise = String(prise)
+        while !prise.isEmpty {
+            strPrise = prise.suffix(3) + strPrise
+            prise = String(prise.dropLast(3))
+            if !prise.isEmpty {
                 strPrise = " " + strPrise
-                count = 0
             }
-            prise /= 10
         }
-        return strPrise + " UEC"
+        return strPrise
     }
     
-    func next() -> Ship {
-        Ship(rawValue: (rawValue + 1) % 5) ?? .raven
+    init(_ type: Ships)
+    {
+        self.type = type
+        title = type.title
+        company = type.company
+        prise = type.prise
+    }
+    
+    func next() -> Item {
+        let nextShip = Ships(rawValue: (type.rawValue + 1) % 5) ?? .raven
+        return Item(nextShip)
     }
 }
 
