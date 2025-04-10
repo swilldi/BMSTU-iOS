@@ -76,6 +76,7 @@ struct Item: ItemProtocol {
     var company: String
     var prise: Int
     
+    
     var formatPrise: String {
         var strPrise = ""
         var prise = String(prise)

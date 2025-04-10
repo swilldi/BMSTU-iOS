@@ -14,12 +14,22 @@ class ViewController: UIViewController {
     private var priseLabel: UILabel?
     private var nextItemButton: UIButton?
     
-    private var item: Item = Item(.raven)
+    private var items: [Item] = [
+        Item(.raven),
+        Item(.andromeda),
+        Item(.f8c),
+        Item(.galaxy),
+        Item(.carrack)
+    ]
+    private var selectedItem: Item?
+    private var itemIndex = 0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         
+        selectedItem = items[itemIndex]
         setupUI()
     }
     
@@ -34,7 +44,7 @@ class ViewController: UIViewController {
     
     // MARK: Создание изображения
     private func setupImage() {
-        let image = UIImage(named: item.title)
+        let image = UIImage(named: selectedItem?.title ?? "Image not found")
         
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -52,7 +62,7 @@ class ViewController: UIViewController {
         factory.textColor = .gray
         factory.textAlignment = .center
         factory.numberOfLines = 1
-        factory.text = item.company.uppercased()
+        factory.text = selectedItem?.company.uppercased() ?? "Company not found "
         view.addSubview(factory)
         
         companyLabel = factory
@@ -65,7 +75,7 @@ class ViewController: UIViewController {
         title.textColor = .white
         title.textAlignment = .center
         title.numberOfLines = 1
-        title.text = item.title.capitalized
+        title.text = selectedItem?.title.capitalized ?? "Title not found"
         view.addSubview(title)
         
         titleLabel = title
@@ -78,7 +88,7 @@ class ViewController: UIViewController {
         prise.textColor = .white
         prise.textAlignment = .center
         prise.numberOfLines = 1
-        prise.text = item.formatPrise
+        prise.text = selectedItem?.formatPrise ?? "Prise not found"
         view.addSubview(prise)
         
         priseLabel = prise
@@ -103,14 +113,17 @@ class ViewController: UIViewController {
     
     // MARK: Дейстия при нажатии кнопки
     @objc private func didTapButton() {
-        // Вот тут вопрос для чего тут требуется вставка "as! any Item"
-        let nextShip = Ships(rawValue: (item.type.rawValue + 1) % 5) ?? .raven
-        item = Item(nextShip)
+        nextIndex()
+        selectedItem = items[itemIndex]
         
-        itemImage?.image = UIImage(named: item.title)
-        companyLabel?.text = item.company.uppercased()
-        titleLabel?.text = item.title.capitalized
-        priseLabel?.text = item.formatPrise
+        itemImage?.image = UIImage(named: selectedItem?.title ?? "Image not found")
+        companyLabel?.text = selectedItem?.company.uppercased()
+        titleLabel?.text = selectedItem?.title.capitalized
+        priseLabel?.text = selectedItem?.formatPrise
+    }
+    
+    private func nextIndex() {
+        itemIndex = (itemIndex + 1) % items.count
     }
     
     // MARK: Создание относительного расположения элементов
@@ -159,3 +172,4 @@ class ViewController: UIViewController {
         ])
     }
 }
+
