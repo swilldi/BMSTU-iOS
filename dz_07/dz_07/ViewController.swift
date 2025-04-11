@@ -105,7 +105,6 @@ class ViewController: UIViewController {
         
         button.layer.cornerRadius = 12
         
-        
         view.addSubview(button)
         
         nextItemButton = button

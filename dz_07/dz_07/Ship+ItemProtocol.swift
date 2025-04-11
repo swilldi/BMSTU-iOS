@@ -69,14 +69,11 @@ enum Ships: Int {
 }
 
 struct Item: ItemProtocol {
-    
     let type: Ships
-    
+
     var title: String
     var company: String
     var prise: Int
-    
-    
     var formatPrise: String {
         var strPrise = ""
         var prise = String(prise)
