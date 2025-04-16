@@ -34,6 +34,19 @@ final class MainViewController: UIViewController {
         label.text = "Загрузки нет"
         return label
     }()
+
+    private lazy var downloadingIndicator: UIView = { //  Спиннер загрузки
+        let view = UIView(frame: self.view.bounds)
+
+        let indocator = UIActivityIndicatorView()
+        indocator.style = .large
+        indocator.center = view.center
+        indocator.startAnimating()
+
+        view.addSubview(indocator)
+        view.isHidden = true
+        return view
+    }()
     
     init(presenter: MainPresenterInput) {
         self.presenter = presenter
@@ -56,6 +69,7 @@ final class MainViewController: UIViewController {
         
         view.addSubview(tableView)
         view.addSubview(progressLabel)
+        view.addSubview(downloadingIndicator)
         
         NSLayoutConstraint.activate([
             progressLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
