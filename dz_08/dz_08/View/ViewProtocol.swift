@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ViewProtocol: AnyObject {
+protocol MainViewInput: AnyObject {
     func updateTable()
-    func updateImage(_ image: UIImage)
+    func updateDowloadingProcess()
 }

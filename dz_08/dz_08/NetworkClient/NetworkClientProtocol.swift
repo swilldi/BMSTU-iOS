@@ -7,15 +7,21 @@
 
 import Foundation
 
-protocol NetworkClientProtocol: AnyObject {
-    func get<T: Decodable>(
+protocol NetworkClientInput: AnyObject {
+    func get <ResponseSchema: Decodable>(
         urlString: String,
-        completion: @escaping (Result<T, NetworkClientError>) -> Void
+        completion: @escaping (Result<ResponseSchema, NetworkClientError>) -> Void
+    )
+    
+    func post<ResponseSchema: Decodable>(
+        urlString: String,
+        requestBody: Encodable,
+        completion: @escaping (Result<ResponseSchema, NetworkClientError>) -> Void
     )
     
     func download(
-        url: String,
-        progressBlock: ((Double) -> Void)?,
+        urlString: String, progressBlock: ((Double) -> Void)?,
         completion: @escaping (Result<Data, NetworkClientError>) -> Void
-    )
+        )
 }
+

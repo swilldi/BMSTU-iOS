@@ -7,10 +7,8 @@
 
 import Foundation
 
-protocol PresenterProtocol: AnyObject {
-    var itemCount: Int { get }
-    
+protocol MainPresenterInput: AnyObject {
+    var itemsCount: Int { get }
     func viewDidLoad()
-    subscript(_ index: Int) -> Item { get }
-    func didTapDownloadButton()
+    func item(at index: Int) -> Item
 }
