@@ -10,7 +10,7 @@ import UIKit
 final class MainViewController: UIViewController {
     private let presenter: MainPresenterInput
     private var loadedImages = 0
-    private var dowloadedImages = [IndexPath:UIImage]()
+    private var dowloadedImages = [IndexPath: UIImage]()
     private var totalImages: Int {
         presenter.itemsCount
     }
@@ -40,6 +40,7 @@ final class MainViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -68,7 +69,6 @@ final class MainViewController: UIViewController {
     }
 }
 
-
 extension MainViewController: MainViewInput {
     func updateDowloadingProcess() {
         progressLabel.text = "Загружено: \(dowloadedImages.count / totalImages * 100)%"
@@ -85,22 +85,31 @@ extension MainViewController: MainViewInput {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
             guard let self, let data, let image = UIImage(data: data) else { return }
             DispatchQueue.main.async {
-                let resizedImage = self.configureImage(image, newSize:CGSize(width: 40, height: 40))
+                let resizedImage = self.configureImage(image, newSize: CGSize(width: 40, height: 40))
                 self.dowloadedImages[indexPath] = resizedImage
                 self.updateDowloadingProcess()
+                
+                if let visibleCell = self.tableView.cellForRow(at: indexPath) {
+                    var updatedContent = visibleCell.defaultContentConfiguration()
+                    updatedContent.text = item.title
+                    updatedContent.image = resizedImage
+                    
+                    updatedContent.imageProperties.maximumSize = CGSize(width: 40, height: 40)
+                    visibleCell.contentConfiguration = updatedContent
+                }
             }
         }.resume()
     }
             
-            func configureImage(_ image: UIImage, newSize: CGSize) -> UIImage {
-                let renderer = UIGraphicsImageRenderer(size: newSize)
-                return renderer.image { _ in
-                    image.draw(in: CGRect(origin: .zero, size: newSize))
-                }
-            }
+    func configureImage(_ image: UIImage, newSize: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+    }
 }
 
 extension MainViewController: UITableViewDataSource {
