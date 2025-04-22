@@ -70,6 +70,13 @@ class ViewController: UIViewController {
         images.axis = .vertical
         images.spacing = 10
         
+        for _ in 0..<3 {
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFit
+            
+            images.addArrangedSubview(imageView)
+        }
+        
         view.addSubview(images)
         images.translatesAutoresizingMaskIntoConstraints = false
         
@@ -94,20 +101,11 @@ extension ViewController: ViewControllerInput {
     
     func updateImages(from imagesData: [Data]) {
         
-        imagesStack.arrangedSubviews.forEach {
-            imagesStack.removeArrangedSubview($0)
-                $0.removeFromSuperview()
-            }
-        
-        for i in 0..<imagesData.count {
-            let data = imagesData[i]
-            let image = UIImage(data: data)
-            let imageView = UIImageView(image: image)
-            
-            imageView.contentMode = .scaleAspectFit
-            
-            imagesStack.addArrangedSubview(imageView)
+        var i = 0
+        imagesStack.arrangedSubviews.forEach { view in
+            guard let view = view as? UIImageView, i < imagesData.count else { return }
+            view.image = UIImage(data: imagesData[i])
+            i += 1
         }
-        
     }
 }
