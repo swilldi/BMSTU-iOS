@@ -18,13 +18,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        view.backgroundColor = .white
         setupUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startAnimate()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupButtonShadow()
     }
     
     private func setupUI() {
@@ -95,12 +100,25 @@ class ViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 15
         
+        
         button.addTarget(self , action: #selector(didClickButton), for: .touchUpInside)
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(button)
         self.button = button
+    }
+    
+    private func setupButtonShadow() {
+        guard let button else { return }
+        
+        let path = UIBezierPath(
+            roundedRect: button.bounds, cornerRadius: 15
+        )
+        button.layer.shadowPath = path.cgPath
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowRadius = 10
+        button.layer.shadowOffset = CGSize(width: 0, height: 10)
     }
     
     @objc private func didClickButton() {
@@ -114,9 +132,11 @@ class ViewController: UIViewController {
         
         UIView.animate(withDuration: timeToClickButtom) {
             button.layer.cornerRadius = 30
+            button.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         } completion: { _ in
             UIView.animate(withDuration: timeToClickButtom) {
                 button.layer.cornerRadius = 15
+                button.transform = .identity
             }
         }
     }
