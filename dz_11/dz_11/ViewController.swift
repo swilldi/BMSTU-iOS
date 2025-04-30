@@ -65,6 +65,7 @@ class ViewController: UIViewController {
         let imageView = UIImageView(image: image)
         
         imageView.contentMode = .scaleAspectFit
+        imageView.alpha = 0
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -94,37 +95,64 @@ class ViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 15
         
+        button.addTarget(self , action: #selector(didClickButton), for: .touchUpInside)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(button)
         self.button = button
     }
     
+    @objc private func didClickButton() {
+        // Ну конкретно тут это бесполезно, но анимашки кнопки – не самое главное
+        buttonClickedAnimation()
+    }
+    
+    private func buttonClickedAnimation() {
+        guard let button else { return }
+        let timeToClickButtom = 0.3
+        
+        UIView.animate(withDuration: timeToClickButtom) {
+            button.layer.cornerRadius = 30
+        } completion: { _ in
+            UIView.animate(withDuration: timeToClickButtom) {
+                button.layer.cornerRadius = 15
+            }
+        }
+    }
+    
     private func startAnimate() {
         guard
-            let logoImageTop
+            let logoImageTop,
+            let logoImage,
+            let label,
+            let button
         else {
             return
         }
         
         // MARK: Картинка спускается
         let timeToImage = 1.5
+        let timeToImageAlpha = 1.0
         logoImageTop.constant = 150
         UIView.animate(withDuration: timeToImage) {
-            self.view.backgroundColor = .systemGreen
+//            self.view.backgroundColor = .systemGreen
             self.view.layoutIfNeeded()
+        }
+        UIView.animate(withDuration: timeToImageAlpha, delay: timeToImage - timeToImageAlpha) {
+            logoImage.alpha = 1
         }
         
         // MARK: Проявление текста
         let timeToLabel = 1.0
         UIView.animate(withDuration: timeToLabel, delay: timeToImage) {
-            self.label?.alpha = 1
+            label.alpha = 1
         }
         
 //        // MARK: Кнопка вылитает
         let timeToButton = 1.0
         UIView.animate(withDuration: timeToButton, delay: timeToImage) {
-            self.button?.transform = .identity
+            button.transform = .identity
         }
     }
 }
