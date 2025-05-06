@@ -14,7 +14,7 @@ final class SceneAssembler {
         let viewController = ViewController()
         let presenter = Presenter(networkClient: networkClient, view: viewController)
         viewController.presenter = presenter
-        
+
         return viewController
     }
 }

@@ -11,4 +11,3 @@ protocol ViewControllerInput: AnyObject {
     func stopDownloadingIndicator()
     func updateImages(from imagesData: [Data])
 }
-

@@ -34,7 +34,7 @@ class Presenter: PresenterInput {
         didFinishLoadingImages()
     }
     
-    private func didFinishLoadingImages () {
+    private func didFinishLoadingImages() {
         networkClient.group.notify(queue: .main) {
             print("Картинки загрузились")
             print(self.networkClient.downloadedData)

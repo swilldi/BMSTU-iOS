@@ -5,11 +5,10 @@
 //  Created by Dmitriy Dudyrev on 18.04.2025.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 
 class NetworkClient: NetworkClientInput {
-    
     let queue = DispatchQueue(label: "downloading", attributes: .concurrent)
     let group = DispatchGroup()
     let lock = NSLock()
@@ -26,7 +25,7 @@ class NetworkClient: NetworkClientInput {
             return
         }
 
-        self.group.enter()
+        group.enter()
         queue.async {
             AF.request(url).responseData { response in
                 self.group.leave()
@@ -42,7 +41,6 @@ class NetworkClient: NetworkClientInput {
                 }
                 self.lock.unlock()
             }
-            
         }
     }
 }

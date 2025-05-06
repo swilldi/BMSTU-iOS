@@ -5,8 +5,8 @@
 //  Created by Dmitriy Dudyrev on 18.04.2025.
 //
 
-import UIKit
 import Alamofire
+import UIKit
 
 class ViewController: UIViewController {
     var presenter: PresenterInput?
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         downloadingIndicator = indicator
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         images.axis = .vertical
         images.spacing = 10
         
-        for _ in 0..<3 {
+        for _ in 0 ..< 3 {
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
             
@@ -87,11 +87,8 @@ class ViewController: UIViewController {
         ])
         
         imagesStack = images
-        
-        
     }
 }
-
 
 extension ViewController: ViewControllerInput {
     func stopDownloadingIndicator() {

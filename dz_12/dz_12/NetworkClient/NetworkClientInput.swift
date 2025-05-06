@@ -9,11 +9,10 @@ import Foundation
 protocol NetworkClientInput: AnyObject {
     func downloadImage(_ url: String)
     func clearDownloadedData()
-    
+
     var queue: DispatchQueue { get }
     var group: DispatchGroup { get }
     var lock: NSLock { get }
-    
-    var downloadedData: [Data] { get }
 
+    var downloadedData: [Data] { get }
 }
