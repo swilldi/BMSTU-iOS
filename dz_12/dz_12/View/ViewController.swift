@@ -9,12 +9,11 @@ import UIKit
 import Alamofire
 
 class ViewController: UIViewController {
+    var presenter: PresenterInput?
     
-    private lazy var presenter: PresenterInput = Presenter(view: self)
     private var downloadingIndicator: UIActivityIndicatorView?
-    
-    var imagesStack = UIStackView()
-    var downloadButton: UIButton?
+    private var imagesStack: UIStackView?
+    private var downloadButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +22,6 @@ class ViewController: UIViewController {
         setupIndicator()
         setupButton()
         setupImagesStack()
-        
     }
     
     private func setupIndicator() {
@@ -62,7 +60,7 @@ class ViewController: UIViewController {
     @objc func startDownloadingImages() {
         print("Загрузка началась")
         downloadingIndicator?.startAnimating()
-        presenter.downoadImages()
+        presenter?.downoadImages()
     }
     
     private func setupImagesStack() {
@@ -101,9 +99,8 @@ extension ViewController: ViewControllerInput {
     }
     
     func updateImages(from imagesData: [Data]) {
-        
         var i = 0
-        imagesStack.arrangedSubviews.forEach { view in
+        imagesStack?.arrangedSubviews.forEach { view in
             guard let view = view as? UIImageView, i < imagesData.count else { return }
             view.image = UIImage(data: imagesData[i])
             i += 1

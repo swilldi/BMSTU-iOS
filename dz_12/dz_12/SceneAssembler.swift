@@ -8,14 +8,13 @@
 import Foundation
 import UIKit
 
-//final class SceneAssembler {
-//    func makeScene() -> UIViewController {
-//        let networkClient = NetworkClient()
-//        let presenter = Presenter(networkClient: networkClient)
-//        print(presenter)
-//        let view = ViewController(presenter: presenter)
-//        presenter.view = view
-//        
-//        return view
-//    }
-//}
+final class SceneAssembler {
+    func makeScene() -> UIViewController {
+        let networkClient = NetworkClient()
+        let viewController = ViewController()
+        let presenter = Presenter(networkClient: networkClient, view: viewController)
+        viewController.presenter = presenter
+        
+        return viewController
+    }
+}

@@ -7,7 +7,7 @@
 import Foundation
 
 protocol NetworkClientInput: AnyObject {
-    func downloadIamge(_ url: String)
+    func downloadImage(_ url: String)
     func clearDownloadedData()
     
     var queue: DispatchQueue { get }

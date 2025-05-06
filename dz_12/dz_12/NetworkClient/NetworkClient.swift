@@ -20,7 +20,7 @@ class NetworkClient: NetworkClientInput {
         downloadedData = []
     }
     
-    func downloadIamge(_ url: String) {
+    func downloadImage(_ url: String) {
         guard let url = URL(string: url) else {
             print("Ошибка: неправильная URL")
             return
