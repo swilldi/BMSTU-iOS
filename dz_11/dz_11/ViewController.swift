@@ -4,6 +4,7 @@
 //
 //  Created by Dmitriy Dudyrev on 30.04.2025.
 //
+// просто комментик, чтобы было что-то новое
 
 import UIKit
 
